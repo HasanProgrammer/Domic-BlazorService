@@ -1,0 +1,10 @@
+﻿{
+  "fa" : {
+    "SignInPage" : {
+      "FormTitle"               : "سامانه مدیریت شارژ ساختمان",
+      "UsernameInputPlacholder" : "نام کاربری",
+      "PasswordInputPlacholder" : "رمز عبور",
+      "ButtonTitle"             : "ورود به سامانه"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import "FontIran.css";
+@import "FontIranNumber.css";
+
+body {
+    font-family: IRANSans !important;
+    background-color: whitesmoke !important;
+}
+
+.toast
+{
+    border: 0 !important;
+}
+
+.toast-body
+{
+    direction: rtl !important;
+}

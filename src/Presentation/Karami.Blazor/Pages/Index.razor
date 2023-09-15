@@ -1,0 +1,22 @@
+﻿@page "/"
+@using Karami.Core.UseCase.Contracts.Interfaces
+@using Karami.UseCase.SignInUseCase.Commands.Create
+@using Karami.Blazor.States
+@inject IMediator mediator
+
+@inherits BlazorState.BlazorStateComponent
+
+<h3 @onclick="OnClickAsync">@State.Count</h3>
+
+@code {
+
+    public CounterState State => GetState<CounterState>();
+
+    public async Task OnClickAsync()
+    {
+        await Mediator.Send(new CounterState.IncrementAction { Amount = 100 });
+        
+        //var result = await mediator.DispatchAsync(new CreateCommand(), default);
+    }
+    
+}

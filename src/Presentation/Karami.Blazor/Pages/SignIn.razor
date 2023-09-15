@@ -1,0 +1,145 @@
+﻿@page "/{language}/sign-in"
+
+@layout SignInLayout
+
+@inherits ErrorBoundaryBase
+
+@using Karami.Core.UseCase.Contracts.Interfaces
+@using Karami.UseCase.SignInUseCase.Commands.Create
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using Microsoft.AspNetCore.DataProtection
+
+@inject IMediator DomicMediator
+@inject IConfiguration Configuration
+@inject IJSRuntime JsRuntime
+@inject IDataProtectionProvider DataProtectionProvider
+@inject PreloadService PreloadService
+
+<div class="row position-absolute w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+    <div class="col-lg-4 col-md-6 col-sm-8">
+        
+        <Card>
+            <CardBody>
+        
+                <div class="row">
+                    <CardTitle Style="text-align: center">
+                        @(Configuration.GetValue<string>($"{Language}:SignInPage:FormTitle"))
+                    </CardTitle>
+                </div>
+
+                <div class="row">
+                    <hr class="h1">
+                </div>
+
+                <div class="row mt-5 mb-4">
+                    <div class="col-8 mx-auto">
+                        <input type="text"
+                               class="form-control"
+                               style="text-align: right;"
+                               placeholder="@(Configuration.GetValue<string>($"{Language}:SignInPage:UsernameInputPlacholder"))"
+                               value="@Username"
+                               onchange="@OnChangeUsername">
+                    </div>
+                </div>
+
+                <div class="row mt-4 mb-5">
+                    <div class="col-8 mx-auto">
+                        <input type="text"
+                               class="form-control"
+                               style="text-align: right"
+                               placeholder="@(Configuration.GetValue<string>($"{Language}:SignInPage:PasswordInputPlacholder"))"
+                               value="@Password"
+                               onchange="@OnChangePassword">
+                    </div>
+                </div>
+
+                <div class="row mt-4 mb-5">
+                    <div class="col-5 mx-auto">
+                        <button class="form-control btn btn-primary active text-white"
+                                type="button"
+                                onclick="@OnClickSignInButton">
+                            @(Configuration.GetValue<string>($"{Language}:SignInPage:ButtonTitle"))
+                            
+                        </button>
+                    </div>
+                </div>
+        
+            </CardBody>
+        </Card>
+        
+    </div>
+</div>
+
+<Preload/>
+        
+<Toasts Placement="ToastsPlacement.TopRight"
+        AutoHide="true"
+        Class="position-absolute m-3 text-center"
+        Messages="@ToastMessages"/>
+
+@code {
+
+    [Parameter]
+    public string Language { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+
+    public List<ToastMessage> ToastMessages { get; set; } = new();
+
+    public void OnChangeUsername(ChangeEventArgs args) => Username = args.Value.ToString();
+    public void OnChangePassword(ChangeEventArgs args) => Password = args.Value.ToString();
+
+    public async Task OnClickSignInButton()
+    {
+        PreloadService.Show();
+        
+        var result =
+            await DomicMediator.DispatchAsync(new SignInCommand { Username = Username , Password = Password }, default);
+
+        if (result.Code == 200)
+        {
+            PreloadService.Hide();
+            
+            ToastMessages.Add(new ToastMessage{
+                Title   = "اعلان"            , 
+                Type    = ToastType.Success ,
+                Message = result.Message
+            });
+
+            await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).SetAsync("Token", result.Body.Token);
+        }
+        else
+        {
+            PreloadService.Hide();
+            
+            ToastMessages.Add(new ToastMessage{
+                Title   = "اعلان"           , 
+                Type    = ToastType.Danger ,
+                Message = result.Message
+            });
+        }
+    }
+    
+    protected override void OnInitialized()
+    {
+        if (string.IsNullOrEmpty(Language) || ( !Language.Trim().Equals("fa") && !Language.Trim().Equals("en") ))
+            throw new Exception("زبان مورد نظر توسط سامانه پشتیبانی نمی گردد !");
+    }
+    
+    protected override Task OnErrorAsync(Exception exception)
+    {
+        PreloadService.Hide();
+        
+        if (exception.GetBaseException().GetType() != typeof(Exception))
+        {
+            ToastMessages.Add(new ToastMessage {
+                Title   = "اعلان"           , 
+                Type    = ToastType.Danger ,
+                Message = exception.Message
+            });
+        }
+        
+        return Task.CompletedTask;
+    }
+
+}
