@@ -1,5 +1,3 @@
-using Karami.Core.Common.ClassExtensions;
-
 namespace Karami.Blazor.Frameworks.Extensions;
 
 public static class IConfigurationBuilderExtension
@@ -16,8 +14,7 @@ public static class IConfigurationBuilderExtension
     {
         var culture = Path.Combine(hostEnvironment.ContentRootPath, "Configs", "Culture.json");
         
-        configurationBuilder.AddCoreEnvConfig(hostEnvironment)
-                            .AddJsonFile(culture, optional: true, reloadOnChange: true);
+        configurationBuilder.AddJsonFile(culture, optional: true, reloadOnChange: true);
 
         return configurationBuilder;
     }
