@@ -31,3 +31,11 @@ Start project
 3 . Run the command [ dotnet publish -c Release ]
 
 4 . Using the [ docker compose up --build ] command
+
+===================================================================================================
+
+Install private domic packages ( Github )
+
+1 . ( CMD ) -> dotnet nuget add source --username {Github Username} --password {Github Token} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/{Github Username}/index.json"
+
+2 . In ( .csproj ) file & ( CMD ) -> dotnet add package {Package Name} --version {Version Number} --source github
