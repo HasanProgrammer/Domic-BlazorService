@@ -14,6 +14,7 @@
 @inject IJSRuntime JsRuntime
 @inject IDataProtectionProvider DataProtectionProvider
 @inject PreloadService PreloadService
+@inject NavigationManager NavigationManager
 
 <div class="row position-absolute w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
     <div class="col-lg-4 col-md-6 col-sm-8">
@@ -44,7 +45,10 @@
 
                 <div class="row mt-4 mb-5">
                     <div class="col-8 mx-auto">
-                        <input type="text"
+                        <span onclick="@OnClickShowPassword" 
+                              class="@(ShowPassword ? "bi-eye" : "bi-eye-slash")"
+                              style="cursor: pointer"/>
+                        <input type="@(ShowPassword ? "text" : "password")"
                                class="form-control"
                                style="text-align: right"
                                placeholder="@(Configuration.GetValue<string>($"{Language}:SignInPage:PasswordInputPlacholder"))"
@@ -80,9 +84,10 @@
 @code {
 
     [Parameter]
-    public string Language { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
+    public string Language   { get; set; }
+    public string Username   { get; set; }
+    public string Password   { get; set; }
+    public bool ShowPassword { get; set; }
 
     public List<ToastMessage> ToastMessages { get; set; } = new();
 
@@ -107,6 +112,9 @@
             });
 
             await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).SetAsync("Token", result.Body.Token);
+            await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).SetAsync("SecurityKey", result.Body.SecurityKey);
+            
+            NavigationManager.NavigateTo($"/{Language}");
         }
         else
         {
@@ -119,6 +127,8 @@
             });
         }
     }
+
+    public void OnClickShowPassword() => ShowPassword = !ShowPassword;
     
     protected override void OnInitialized()
     {

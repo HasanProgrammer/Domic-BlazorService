@@ -18,6 +18,7 @@ builder.WebHost.ConfigureAppConfiguration((context, builder) => builder.AddJsonF
 #region Service Container
 
 builder.RegisterHelpers();
+builder.RegisterCaching();
 builder.RegisterCommandQueryUseCases();
 builder.RegisterMessageBroker();
 builder.RegisterServicesOfHttpWebRequest();

@@ -1,0 +1,19 @@
+﻿@page "/{language}"
+
+@layout MainLayout
+
+@inherits ErrorBoundaryBase
+
+<h3>Index</h3>
+
+@code {
+
+    [Parameter]
+    public string Language { get; set; }
+
+    protected override Task OnErrorAsync(Exception exception)
+    {
+        return Task.CompletedTask;
+    }
+
+}

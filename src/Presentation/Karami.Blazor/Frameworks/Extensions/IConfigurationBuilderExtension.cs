@@ -13,8 +13,10 @@ public static class IConfigurationBuilderExtension
     )
     {
         var culture = Path.Combine(hostEnvironment.ContentRootPath, "Configs", "Culture.json");
+        var storage = Path.Combine(hostEnvironment.ContentRootPath, "Configs", "Storage.json");
         
-        configurationBuilder.AddJsonFile(culture, optional: true, reloadOnChange: true);
+        configurationBuilder.AddJsonFile(culture, optional: true, reloadOnChange: true)
+                            .AddJsonFile(storage, optional: true, reloadOnChange: true);
 
         return configurationBuilder;
     }

@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using Microsoft.AspNetCore.DataProtection
+@using Karami.Core.UseCase.Contracts.Interfaces
+
+@inject IJSRuntime JsRuntime
+@inject IDataProtectionProvider DataProtectionProvider
+@inject NavigationManager NavigationManager
+@inject IRedisCache RedisCache
+@inject IJsonWebToken JsonWebToken
+
+<ChildContent/>
+
+@code {
+    
+    [Parameter]
+    public RenderFragment<LayoutComponentBase> ChildContent { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var token = await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).GetAsync<string>("Token");
+        
+        var securityKey =
+            await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).GetAsync<string>("SecurityKey");
+        
+        if (!RedisCache.GetCacheValue( token.Value is not null ? JsonWebToken.GetUsername(token.Value) : "" )?.Equals(securityKey.Value) ?? true)
+            NavigationManager.NavigateTo("/fa/sign-in");
+        
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+}
