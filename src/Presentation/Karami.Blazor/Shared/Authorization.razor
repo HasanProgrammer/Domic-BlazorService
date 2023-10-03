@@ -10,7 +10,7 @@
 @inject IRedisCache RedisCache
 @inject IJsonWebToken JsonWebToken
 
-<ChildContent/>
+@ChildContent.Invoke(this)
 
 @code {
     

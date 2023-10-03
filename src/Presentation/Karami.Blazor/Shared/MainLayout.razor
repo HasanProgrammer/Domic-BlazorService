@@ -1,7 +1,45 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
 <PageTitle>شارژینو</PageTitle>
 
 <Authorization>
-    @Body
+    
+    <MudLayout>
+        <MudAppBar Dense="true" Fixed="true" Color="Color.Success" Elevation="1">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer"/>
+            <MudSpacer/>
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="" Target="_blank"/>
+        </MudAppBar>
+
+        <MudDrawer @bind-Open="@IsOpen" Elevation="1">
+            <MudDrawerHeader>
+                <MudText Typo="Typo.h6" Style="font-family: IRANSans !important;">شارژینو</MudText>
+            </MudDrawerHeader>
+            <MudNavMenu>
+                <MudNavLink Href="/fa">صفحه اصلی</MudNavLink>
+                <MudNavGroup Title="اطلاعات پایه">
+                    <MudNavLink Href="/fa/basic-information/permission">مدیریت سطوح دسترسی</MudNavLink>
+                </MudNavGroup>
+                <MudNavGroup Title="تنظیمات">
+                    <MudNavLink Href="">پروفایل کاربری</MudNavLink>
+                </MudNavGroup>
+            </MudNavMenu>
+        </MudDrawer>
+        <MudMainContent Class="pt-16 px-16">
+            @Body
+        </MudMainContent>
+    </MudLayout>
+
 </Authorization>
+
+@code {
+
+    public bool IsOpen;
+
+    public void ToggleDrawer() => IsOpen = !IsOpen;
+
+}

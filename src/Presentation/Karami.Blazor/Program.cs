@@ -2,6 +2,8 @@ using System.Reflection;
 using BlazorState;
 using Karami.Blazor.Frameworks.Extensions;
 using Karami.Core.Infrastructure.Extensions;
+using Microsoft.Extensions.Azure;
+using MudBlazor.Services;
 
 /*-------------------------------------------------------------------*/
 
@@ -25,6 +27,7 @@ builder.RegisterServicesOfHttpWebRequest();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddBlazorState(
     options => options.Assemblies = new[] { typeof(Program).GetTypeInfo().Assembly }
