@@ -15,12 +15,13 @@
   <ItemGroup>
     <PackageReference Include="Blazor-State" Version="10.0.0" />
     <PackageReference Include="Blazor.Bootstrap" Version="1.10.1" />
+    <PackageReference Include="MudBlazor" Version="6.10.0" />
   </ItemGroup>
   <!--Packages-->
 
   <!--CorePackage | Infrastructure-->
   <ItemGroup>
-    <PackageReference Include="Domic.Architecture.Infrastructure" Version="1.0.2"/>
+    <PackageReference Include="Domic.Architecture.Infrastructure" Version="1.0.2" />
   </ItemGroup>
   <!--CorePackage | Infrastructure-->
 
