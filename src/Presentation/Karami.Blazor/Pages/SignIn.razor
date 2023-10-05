@@ -5,7 +5,7 @@
 @inherits ErrorBoundaryBase
 
 @using Karami.Core.UseCase.Contracts.Interfaces
-@using Karami.UseCase.SignInUseCase.Commands.Create
+@using Karami.UseCase.UserUseCase.Commands.Create
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @using Microsoft.AspNetCore.DataProtection
 
@@ -99,20 +99,19 @@
         PreloadService.Show();
         
         var result =
-            await DomicMediator.DispatchAsync(new SignInCommand { Username = Username , Password = Password }, default);
+            await DomicMediator.DispatchAsync(new SignInCommand { Username = Username, Password = Password }, default);
 
         if (result.Code == 200)
         {
             PreloadService.Hide();
             
-            ToastMessages.Add(new ToastMessage{
-                Title   = "اعلان"            , 
+            ToastMessages.Add(new ToastMessage {
+                Title   = "اعلان"            ,
                 Type    = ToastType.Success ,
                 Message = result.Message
             });
 
-            await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).SetAsync("Token", result.Body.Token);
-            await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).SetAsync("SecurityKey", result.Body.SecurityKey);
+            await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).SetAsync("Username", result.Body.Username);
             
             NavigationManager.NavigateTo($"/{Language}");
         }

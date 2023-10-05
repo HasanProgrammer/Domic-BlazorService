@@ -19,12 +19,9 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var token = await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).GetAsync<string>("Token");
+        var currentUser = await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).GetAsync<string>("Username");
         
-        var securityKey =
-            await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).GetAsync<string>("SecurityKey");
-        
-        if (!RedisCache.GetCacheValue( token.Value is not null ? JsonWebToken.GetUsername(token.Value) : "" )?.Equals(securityKey.Value) ?? true)
+        if ( string.IsNullOrEmpty( RedisCache.GetCacheValue( currentUser.Value ?? "" ) ) )
             NavigationManager.NavigateTo("/fa/sign-in");
         
         await base.OnAfterRenderAsync(firstRender);

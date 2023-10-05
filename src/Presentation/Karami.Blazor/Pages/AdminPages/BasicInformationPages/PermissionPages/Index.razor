@@ -2,38 +2,140 @@
 
 @layout MainLayout
 
+@using Karami.UseCase.UserUseCase.DTOs.ViewModels
+@using Karami.Core.UseCase.Contracts.Interfaces
+@using Karami.UseCase.PermissionUseCase.Queries.ReadAllPaginated
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using Microsoft.AspNetCore.DataProtection
+@using ButtonType = MudBlazor.ButtonType
+
 @inherits ErrorBoundaryBase
 
-<MudTable @*Items="@Elements.Take(4)"*@ Hover="true" Breakpoint="Breakpoint.Sm" Loading="@_loading" LoadingProgressColor="Color.Info">
-    <HeaderContent>
-        <MudTh>نام</MudTh>
-        <MudTh>نقش</MudTh>
-        <MudTh>حذف شده</MudTh>
-        <MudTh>Position</MudTh>
-        <MudTh>Molar mass</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Name">@context.Sign</MudTd>
-        <MudTd DataLabel="Role">@context.Sign</MudTd>
-        <MudTd DataLabel="IsDeleted">@context.Sign</MudTd>
-    </RowTemplate>
-</MudTable>
+@inject IMediator Mediator
+@inject IJSRuntime JsRuntime
+@inject IDataProtectionProvider DataProtectionProvider
+
+<MudContainer>
+    
+    <MudTable Items="@_elements"
+              Hover="true"
+              FixedHeader="true"
+              Breakpoint="Breakpoint.Sm"
+              Loading="@_loading"
+              LoadingProgressColor="Color.Info">
+
+        <HeaderContent>
+            <MudTh>نام</MudTh>
+            <MudTh>عملیات</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd>
+                <MudButton StartIcon="@Icons.Material.Filled.Edit"
+                           ButtonType="ButtonType.Button"
+                           Variant="Variant.Filled"
+                           Color="Color.Warning"
+                           Style="font-family: IRANSans !important; width: 8em !important;">ویرایش</MudButton>
+
+                <MudButton StartIcon="@Icons.Material.Filled.Delete"
+                           ButtonType="ButtonType.Button"
+                           Variant="Variant.Filled"
+                           Color="Color.Error"
+                           Style="font-family: IRANSans !important; width: 8em; !important;">حذف</MudButton>
+            </MudTd>
+        </RowTemplate>
+
+    </MudTable>
+
+    <Pagination TotalPages="@_countItems" 
+                LastLinkText="آخرین صفحه"
+                FirstLinkText="اولین صفحه"
+                NextLinkText="بعدی"
+                PreviousLinkText="قبلی"
+                PageChanged="@OnChangePageNumber"
+                ActivePageNumber="_selectedItem"/>
+
+</MudContainer>
+
+<Toasts Placement="ToastsPlacement.BottomRight"
+        AutoHide="true"
+        Class="position-absolute m-5 m-5 text-center"
+        Messages="@ToastMessages"/>
 
 @code {
+
+    private bool _loading = true;
     
-    private bool _loading;
-    
+    private int _countItems;
+    private int _selectedItem = 1;
+    private string _currentUser;
+
+    private List<ToastMessage> ToastMessages            = new();
+    private IEnumerable<PermissionsViewModel> _elements = new List<PermissionsViewModel>();
+
     [Parameter]
     public string Language { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
+        _currentUser =
+            ( await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).GetAsync<string>("Username") ).Value;
+        
+        var result =
+            await Mediator.DispatchAsync(
+                new ReadAllPaginatedQuery {
+                    PageNumber = _selectedItem, CountPerPage = 10, CurrentUser = _currentUser
+                }, default
+            );
+
+        _elements   = result.Collection;
+        _countItems = result.TotalPages;
+        _loading    = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            _currentUser =
+                ( await new ProtectedLocalStorage(JsRuntime, DataProtectionProvider).GetAsync<string>("Username") ).Value;
     }
 
     protected override Task OnErrorAsync(Exception exception)
     {
+        ToastMessages.Add(new ToastMessage {
+            Title   = "اعلان"           , 
+            Type    = ToastType.Danger ,
+            Message = exception.Message
+        });
+        
         return Task.CompletedTask;
+    }
+
+    public void OnChangePageNumber(int pageNumber)
+    {
+        _loading      = true;
+        _selectedItem = pageNumber;
+
+        _fetchData(pageNumber);
+    }
+
+    private void _fetchData(int pageNumber)
+    {
+        var currentUser = _currentUser;
+        
+        var result =
+            Mediator.DispatchAsync(
+                new ReadAllPaginatedQuery {
+                    PageNumber = pageNumber, CountPerPage = 10, CurrentUser = currentUser
+                }, default
+            )
+            .GetAwaiter()
+            .GetResult();
+
+        _elements   = result.Collection;
+        _countItems = result.TotalPages;
+        _loading    = false;
     }
 
 }

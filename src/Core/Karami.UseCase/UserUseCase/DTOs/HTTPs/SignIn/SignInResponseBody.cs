@@ -2,6 +2,6 @@
 
 public class SignInResponseBody
 {
-    public string Token { get; set; }
-    public string SecurityKey { get; set; }
+    public string Token    { get; set; }
+    public string Username { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿using Karami.Core.UseCase.Contracts.Interfaces;
 using Karami.UseCase.UserUseCase.DTOs.HTTPs.SignIn;
 
-namespace Karami.UseCase.SignInUseCase.Commands.Create;
+namespace Karami.UseCase.UserUseCase.Commands.Create;
 
 public class SignInCommand : ICommand<SignInResponse>
 {

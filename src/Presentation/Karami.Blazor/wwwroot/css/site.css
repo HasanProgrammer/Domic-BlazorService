@@ -15,3 +15,8 @@ body {
 {
     direction: rtl !important;
 }
+
+.mud-pagination, .mud-button-label
+{
+    font-family: IRANSans !important;
+}

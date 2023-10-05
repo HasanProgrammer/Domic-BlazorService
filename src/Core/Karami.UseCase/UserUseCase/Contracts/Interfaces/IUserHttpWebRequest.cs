@@ -1,5 +1,5 @@
 ﻿using Karami.Core.UseCase.Contracts.Interfaces;
-using Karami.UseCase.SignInUseCase.Commands.Create;
+using Karami.UseCase.UserUseCase.Commands.Create;
 using Karami.UseCase.UserUseCase.DTOs.HTTPs.SignIn;
 
 namespace Karami.UseCase.UserUseCase.Contracts.Interfaces;

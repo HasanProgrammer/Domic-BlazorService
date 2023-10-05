@@ -3,7 +3,7 @@ using Karami.Core.UseCase.Contracts.Interfaces;
 using Karami.UseCase.UserUseCase.Contracts.Interfaces;
 using Karami.UseCase.UserUseCase.DTOs.HTTPs.SignIn;
 
-namespace Karami.UseCase.SignInUseCase.Commands.Create;
+namespace Karami.UseCase.UserUseCase.Commands.Create;
 
 public class SignInCommandHandler : ICommandHandler<SignInCommand, SignInResponse>
 {
@@ -28,11 +28,10 @@ public class SignInCommandHandler : ICommandHandler<SignInCommand, SignInRespons
         if (response.Code == 200)
         {
             var currentUser = _jsonWebToken.GetUsername(response.Body.Token);
-            var securityKey = Guid.NewGuid().ToString();
 
-            _redisCache.SetCacheValue(new KeyValuePair<string, string>(currentUser, securityKey));
+            _redisCache.SetCacheValue(new KeyValuePair<string, string>(currentUser, response.Body.Token));
 
-            response.Body.SecurityKey = securityKey;
+            response.Body.Username = currentUser;
         }
 
         return response;

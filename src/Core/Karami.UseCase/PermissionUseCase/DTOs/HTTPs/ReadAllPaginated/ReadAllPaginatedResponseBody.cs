@@ -1,7 +1,9 @@
-﻿namespace Karami.UseCase.UserUseCase.DTOs.HTTPs.SignIn;
+﻿using Karami.Core.Common.ClassHelpers;
+using Karami.UseCase.UserUseCase.DTOs.ViewModels;
+
+namespace Karami.UseCase.UserUseCase.DTOs.HTTPs.SignIn;
 
 public class ReadAllPaginatedResponseBody
 {
-    public string Token { get; set; }
-    public string SecurityKey { get; set; }
+    public PaginatedCollection<PermissionsViewModel> Permissions { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
 using Karami.Core.Infrastructure.Extensions;
-using Karami.UseCase.SignInUseCase.Commands.Create;
+using Karami.UseCase.UserUseCase.Commands.Create;
 using Karami.UseCase.UserUseCase.Contracts.Interfaces;
 using Karami.UseCase.UserUseCase.DTOs.HTTPs.SignIn;
 

@@ -1,8 +1,11 @@
 using Karami.Core.UseCase.DTOs.ViewModels;
 
-namespace Karami.UseCase.SignInUseCase.DTOs.ViewModels;
+namespace Karami.UseCase.UserUseCase.DTOs.ViewModels;
 
 public class PermissionsViewModel : ViewModel
 {
-    
+    public string Id       { get; set; }
+    public string Name     { get; set; }
+    public string RoleId   { get; set; }
+    public string RoleName { get; set; }
 }
