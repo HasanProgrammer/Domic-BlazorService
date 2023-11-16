@@ -6,7 +6,7 @@ Deploy ( With docker | Windows OS by Linux container )
 
 2 . Open powershell ( Administrator ) & run below commands
 
-dotnet dev-certs https -ep $env:USERPROFILE\.aspnet\https\Karami.Blazor.pfx -p [ CrypticPassword ]
+dotnet dev-certs https -ep $env:USERPROFILE\.aspnet\https\Karami.WebAPI.pfx -p [ CrypticPassword ]
 dotnet dev-certs https --trust
 
 3 . Next, see the docker-compose.yml in this directory
@@ -15,22 +15,24 @@ dotnet dev-certs https --trust
 
 Docker usefule commands
 
-1 . IP Container : docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' [ Container's name ]
+1 . docker network create [ Network's name ]
 
-2 . Run composer file : docker compose up --build
+2 . docker network ls
+
+3 . docker network inspect [ Network's id ]
+
+4 . IP Container : docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' [ Container's id ]
+
+5 . Run composer file : docker compose up --build
 
 ===================================================================================================
 
 Start project
 
-1 . Go to the [ Services -> CoreService -> Triggers -> Karami.Init.Docker -> Core.Rabbit ] path & open up cmd & run [ docker compose up ]
-    Go to the [ Services -> CoreService -> Triggers -> Karami.Init.MessageBroker ] path & run project
+1 . Go to the [ TriggerService -> Karami.Init.Docker -> Core.Rabbit ] path & open up cmd & run [ docker compose up ]
+    Go to the [ TriggerService -> Karami.Init.MessageBroker ] path & run project
 
-2 . Running each project by [ dotnet run ] command = this command is generated some files in root folder ( Program.cs folder )
-
-3 . Run the command [ dotnet publish -c Release ]
-
-4 . Using the [ docker compose up --build ] command
+2 . Using the [ docker compose up --build ] command
 
 ===================================================================================================
 

@@ -14,6 +14,20 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5099",
       "environmentVariables": {
+        "E-RabbitMQ-Host": "",
+        "E-RabbitMQ-Port": "",
+        "E-RabbitMQ-Username": "",
+        "E-RabbitMQ-Password": "",
+        "I-RabbitMQ-Host": "",
+        "I-RabbitMQ-Port": "",
+        "I-RabbitMQ-Username": "",
+        "I-RabbitMQ-Password": "",
+        "RedisConnectionString": "127.0.0.1:6379",
+        "MongoConnectionString": "",
+        "C-SqlServerConnectionString": "",
+        "Q-SqlServerConnectionString": "",
+        "Host": "localhost",
+        "Port": "7010",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -23,6 +37,20 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7010;http://localhost:5099",
       "environmentVariables": {
+        "E-RabbitMQ-Host": "",
+        "E-RabbitMQ-Port": "",
+        "E-RabbitMQ-Username": "",
+        "E-RabbitMQ-Password": "",
+        "I-RabbitMQ-Host": "",
+        "I-RabbitMQ-Port": "",
+        "I-RabbitMQ-Username": "",
+        "I-RabbitMQ-Password": "",
+        "RedisConnectionString": "127.0.0.1:6379",
+        "MongoConnectionString": "",
+        "C-SqlServerConnectionString": "",
+        "Q-SqlServerConnectionString": "",
+        "Host": "localhost",
+        "Port": "7010",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

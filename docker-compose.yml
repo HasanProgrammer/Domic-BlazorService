@@ -1,0 +1,55 @@
+name: 'blazor_service'
+
+services:
+  
+  domic.blazor:
+    networks:
+      - domic
+    image: blazor_service:1.0.0
+    container_name: "blazor_service"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - 80:443
+    volumes:
+      - log:/app/CoreLogs
+      - ~\.aspnet\https\:/https/
+    environment:
+      - E-RabbitMQ-Host=
+      - E-RabbitMQ-Port=
+      - E-RabbitMQ-Username=
+      - E-RabbitMQ-Password=
+      - I-RabbitMQ-Host=
+      - I-RabbitMQ-Port=
+      - I-RabbitMQ-Username=
+      - I-RabbitMQ-Password=
+      - RedisConnectionString=domic.blazor.redis:6379
+      - MongoConnectionString=
+      - C-SqlServerConnectionString=
+      - Q-SqlServerConnectionString=
+      - Host=domic.blazor
+      - Port=80
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Dotris313@313%%
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/Karami.WebAPI.pfx
+    depends_on:
+      - domic.blazor.redis
+
+  domic.blazor.redis:
+    networks:
+      - domic
+    image: 'redis'
+    container_name: 'blazor_redis'
+    command: 'redis-server'
+    ports:
+      - 6150:6379
+
+volumes:
+  log:
+    
+networks: 
+  domic:
+    external: true
