@@ -1,7 +1,7 @@
 ﻿{
   "fa" : {
     "SignInPage" : {
-      "FormTitle"               : "سامانه مدیریت شارژ ساختمان",
+      "FormTitle"               : "سامانه مدیریت گزارش های سیستمی",
       "UsernameInputPlacholder" : "نام کاربری",
       "PasswordInputPlacholder" : "رمز عبور",
       "ButtonTitle"             : "ورود به سامانه"

@@ -1,45 +1,37 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
-
 <PageTitle>شارژینو</PageTitle>
 
 <Authorization>
     
-    <MudLayout>
-        <MudAppBar Dense="true" Fixed="true" Color="Color.Success" Elevation="1">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer"/>
-            <MudSpacer/>
-            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="" Target="_blank"/>
-        </MudAppBar>
-
-        <MudDrawer @bind-Open="@IsOpen" Elevation="1">
-            <MudDrawerHeader>
-                <MudText Typo="Typo.h6" Style="font-family: IRANSans !important;">شارژینو</MudText>
-            </MudDrawerHeader>
-            <MudNavMenu>
-                <MudNavLink Href="/fa">صفحه اصلی</MudNavLink>
-                <MudNavGroup Title="اطلاعات پایه">
-                    <MudNavLink Href="/fa/basic-information/permission">مدیریت سطوح دسترسی</MudNavLink>
-                </MudNavGroup>
-                <MudNavGroup Title="تنظیمات">
-                    <MudNavLink Href="">پروفایل کاربری</MudNavLink>
-                </MudNavGroup>
-            </MudNavMenu>
-        </MudDrawer>
-        <MudMainContent Class="pt-16 px-16">
-            @Body
-        </MudMainContent>
-    </MudLayout>
+    <Sidebar @ref="sidebar"
+             Title="سامانه مدیریت گزارش های سیستمی"
+             DataProvider="SidebarDataProvider" />
 
 </Authorization>
 
 @code {
+    
+    Sidebar sidebar;
+    IEnumerable<NavItem> navItems;
 
-    public bool IsOpen;
+    private async Task<SidebarDataProviderResult> SidebarDataProvider(SidebarDataProviderRequest request)
+    {
+        navItems ??= GetNavItems();
 
-    public void ToggleDrawer() => IsOpen = !IsOpen;
+        return await Task.FromResult(request.ApplyTo(navItems));
+    }
 
+    private IEnumerable<NavItem> GetNavItems()
+    {
+        navItems = new List<NavItem>
+        {
+            new NavItem { Href = "/getting-started", IconName = IconName.HouseDoorFill, Text = "Getting Started"},
+            new NavItem { Href = "/alerts", IconName = IconName.CheckCircleFill, Text = "Alerts"},
+            new NavItem { Href = "/autocomplete", IconName = IconName.InputCursorText, Text = "Auto Complete"},
+            new NavItem { Href = "/breadcrumb", IconName = IconName.SegmentedNav, Text = "Breadcrumb"},
+            new NavItem { Href = "/sidebar", IconName = IconName.LayoutSidebarInset, Text = "Sidebar"},
+        };
+        return navItems;
+    }
 }
